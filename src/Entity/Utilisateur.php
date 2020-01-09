@@ -58,10 +58,22 @@ class Utilisateur
      */
     private $matchs;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Set", mappedBy="utilisateur_gagnant")
+     */
+    private $sets_gagnes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Set", mappedBy="utilisateur_perdant")
+     */
+    private $sets_perdus;
+
     public function __construct()
     {
         $this->tournois = new ArrayCollection();
         $this->matchs = new ArrayCollection();
+        $this->sets_gagnes = new ArrayCollection();
+        $this->sets_perdus = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -193,6 +205,68 @@ class Utilisateur
     {
         if ($this->matchs->contains($match)) {
             $this->matchs->removeElement($match);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Set[]
+     */
+    public function getSetsGagnes(): Collection
+    {
+        return $this->sets_gagnes;
+    }
+
+    public function addSetsGagne(Set $setsGagne): self
+    {
+        if (!$this->sets_gagnes->contains($setsGagne)) {
+            $this->sets_gagnes[] = $setsGagne;
+            $setsGagne->setUtilisateurGagnant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSetsGagne(Set $setsGagne): self
+    {
+        if ($this->sets_gagnes->contains($setsGagne)) {
+            $this->sets_gagnes->removeElement($setsGagne);
+            // set the owning side to null (unless already changed)
+            if ($setsGagne->getUtilisateurGagnant() === $this) {
+                $setsGagne->setUtilisateurGagnant(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Set[]
+     */
+    public function getSetsPerdus(): Collection
+    {
+        return $this->sets_perdus;
+    }
+
+    public function addSetsPerdus(Set $setsPerdus): self
+    {
+        if (!$this->sets_perdus->contains($setsPerdus)) {
+            $this->sets_perdus[] = $setsPerdus;
+            $setsPerdus->setUtilisateurPerdant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSetsPerdus(Set $setsPerdus): self
+    {
+        if ($this->sets_perdus->contains($setsPerdus)) {
+            $this->sets_perdus->removeElement($setsPerdus);
+            // set the owning side to null (unless already changed)
+            if ($setsPerdus->getUtilisateurPerdant() === $this) {
+                $setsPerdus->setUtilisateurPerdant(null);
+            }
         }
 
         return $this;

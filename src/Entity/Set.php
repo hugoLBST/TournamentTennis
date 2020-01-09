@@ -32,6 +32,16 @@ class Set
      */
     private $unMatch;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="sets_gagnes")
+     */
+    private $utilisateur_gagnant;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="sets_perdus")
+     */
+    private $utilisateur_perdant;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +79,30 @@ class Set
     public function setUnMatch(?Match $unMatch): self
     {
         $this->unMatch = $unMatch;
+
+        return $this;
+    }
+
+    public function getUtilisateurGagnant(): ?Utilisateur
+    {
+        return $this->utilisateur_gagnant;
+    }
+
+    public function setUtilisateurGagnant(?Utilisateur $utilisateur_gagnant): self
+    {
+        $this->utilisateur_gagnant = $utilisateur_gagnant;
+
+        return $this;
+    }
+
+    public function getUtilisateurPerdant(): ?Utilisateur
+    {
+        return $this->utilisateur_perdant;
+    }
+
+    public function setUtilisateurPerdant(?Utilisateur $utilisateur_perdant): self
+    {
+        $this->utilisateur_perdant = $utilisateur_perdant;
 
         return $this;
     }
