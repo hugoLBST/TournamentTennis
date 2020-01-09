@@ -34,9 +34,15 @@ class Match
      */
     private $sets;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Utilisateur", mappedBy="matchs")
+     */
+    private $utilisateurs;
+
     public function __construct()
     {
         $this->sets = new ArrayCollection();
+        $this->utilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,6 +100,34 @@ class Match
             if ($set->getUnMatch() === $this) {
                 $set->setUnMatch(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Utilisateur[]
+     */
+    public function getUtilisateurs(): Collection
+    {
+        return $this->utilisateurs;
+    }
+
+    public function addUtilisateur(Utilisateur $utilisateur): self
+    {
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs[] = $utilisateur;
+            $utilisateur->addMatch($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisateur(Utilisateur $utilisateur): self
+    {
+        if ($this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->removeElement($utilisateur);
+            $utilisateur->removeMatch($this);
         }
 
         return $this;

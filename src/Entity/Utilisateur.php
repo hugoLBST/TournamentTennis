@@ -53,9 +53,15 @@ class Utilisateur
      */
     private $tournois;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Match", inversedBy="utilisateurs")
+     */
+    private $matchs;
+
     public function __construct()
     {
         $this->tournois = new ArrayCollection();
+        $this->matchs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -161,6 +167,32 @@ class Utilisateur
             if ($tournois->getUtilisateur() === $this) {
                 $tournois->setUtilisateur(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Match[]
+     */
+    public function getMatchs(): Collection
+    {
+        return $this->matchs;
+    }
+
+    public function addMatch(Match $match): self
+    {
+        if (!$this->matchs->contains($match)) {
+            $this->matchs[] = $match;
+        }
+
+        return $this;
+    }
+
+    public function removeMatch(Match $match): self
+    {
+        if ($this->matchs->contains($match)) {
+            $this->matchs->removeElement($match);
         }
 
         return $this;
