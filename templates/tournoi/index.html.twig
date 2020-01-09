@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tournoi index{% endblock %}
+
+{% block body %}
+    <h1>Tournoi index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>DateDebutTournoi</th>
+                <th>DateFinTournoi</th>
+                <th>EstVisible</th>
+                <th>Surface</th>
+                <th>CategorieAge</th>
+                <th>GenreHomme</th>
+                <th>Description</th>
+                <th>DateDebutInscription</th>
+                <th>DateFinInscription</th>
+                <th>InscriptionManuelle</th>
+                <th>NombrePlaces</th>
+                <th>MotDePasse</th>
+                <th>ValidationInscriptions</th>
+                <th>NbSetsGagnants</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tournoi in tournois %}
+            <tr>
+                <td>{{ tournoi.id }}</td>
+                <td>{{ tournoi.nom }}</td>
+                <td>{{ tournoi.adresse }}</td>
+                <td>{{ tournoi.dateDebutTournoi ? tournoi.dateDebutTournoi|date('Y-m-d') : '' }}</td>
+                <td>{{ tournoi.dateFinTournoi ? tournoi.dateFinTournoi|date('Y-m-d') : '' }}</td>
+                <td>{{ tournoi.estVisible ? 'Yes' : 'No' }}</td>
+                <td>{{ tournoi.surface }}</td>
+                <td>{{ tournoi.categorieAge }}</td>
+                <td>{{ tournoi.genreHomme ? 'Yes' : 'No' }}</td>
+                <td>{{ tournoi.description }}</td>
+                <td>{{ tournoi.dateDebutInscription ? tournoi.dateDebutInscription|date('Y-m-d') : '' }}</td>
+                <td>{{ tournoi.dateFinInscription ? tournoi.dateFinInscription|date('Y-m-d') : '' }}</td>
+                <td>{{ tournoi.inscriptionManuelle ? 'Yes' : 'No' }}</td>
+                <td>{{ tournoi.nombrePlaces }}</td>
+                <td>{{ tournoi.motDePasse }}</td>
+                <td>{{ tournoi.validationInscriptions ? 'Yes' : 'No' }}</td>
+                <td>{{ tournoi.nbSetsGagnants }}</td>
+                <td>
+                    <a href="{{ path('tournoi_show', {'id': tournoi.id}) }}">show</a>
+                    <a href="{{ path('tournoi_edit', {'id': tournoi.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="18">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('tournoi_new') }}">Create new</a>
+{% endblock %}
