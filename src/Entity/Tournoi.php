@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -95,6 +97,21 @@ class Tournoi
      * @ORM\Column(type="integer")
      */
     private $nbSetsGagnants;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Tour", mappedBy="tournoi")
+     */
+    private $tour;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Utilisateur", inversedBy="tournois")
+     */
+    private $utilisateur;
+
+    public function __construct()
+    {
+        $this->tour = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -289,6 +306,49 @@ class Tournoi
     public function setNbSetsGagnants(int $nbSetsGagnants): self
     {
         $this->nbSetsGagnants = $nbSetsGagnants;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tour[]
+     */
+    public function getTour(): Collection
+    {
+        return $this->tour;
+    }
+
+    public function addTour(Tour $tour): self
+    {
+        if (!$this->tour->contains($tour)) {
+            $this->tour[] = $tour;
+            $tour->setTournoi($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTour(Tour $tour): self
+    {
+        if ($this->tour->contains($tour)) {
+            $this->tour->removeElement($tour);
+            // set the owning side to null (unless already changed)
+            if ($tour->getTournoi() === $this) {
+                $tour->setTournoi(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getUtilisateur(): ?Utilisateur
+    {
+        return $this->utilisateur;
+    }
+
+    public function setUtilisateur(?Utilisateur $utilisateur): self
+    {
+        $this->utilisateur = $utilisateur;
 
         return $this;
     }

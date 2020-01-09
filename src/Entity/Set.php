@@ -26,6 +26,12 @@ class Set
      */
     private $nbJeuDuPerdant;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Match", inversedBy="sets")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $unMatch;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +57,18 @@ class Set
     public function setNbJeuDuPerdant(int $nbJeuDuPerdant): self
     {
         $this->nbJeuDuPerdant = $nbJeuDuPerdant;
+
+        return $this;
+    }
+
+    public function getUnMatch(): ?Match
+    {
+        return $this->unMatch;
+    }
+
+    public function setUnMatch(?Match $unMatch): self
+    {
+        $this->unMatch = $unMatch;
 
         return $this;
     }

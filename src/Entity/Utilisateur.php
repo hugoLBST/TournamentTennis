@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,6 +47,16 @@ class Utilisateur
      * @ORM\Column(type="string", length=5)
      */
     private $niveau;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Tournoi", mappedBy="utilisateur")
+     */
+    private $tournois;
+
+    public function __construct()
+    {
+        $this->tournois = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +131,37 @@ class Utilisateur
     public function setNiveau(string $niveau): self
     {
         $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tournoi[]
+     */
+    public function getTournois(): Collection
+    {
+        return $this->tournois;
+    }
+
+    public function addTournois(Tournoi $tournois): self
+    {
+        if (!$this->tournois->contains($tournois)) {
+            $this->tournois[] = $tournois;
+            $tournois->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTournois(Tournoi $tournois): self
+    {
+        if ($this->tournois->contains($tournois)) {
+            $this->tournois->removeElement($tournois);
+            // set the owning side to null (unless already changed)
+            if ($tournois->getUtilisateur() === $this) {
+                $tournois->setUtilisateur(null);
+            }
+        }
 
         return $this;
     }
